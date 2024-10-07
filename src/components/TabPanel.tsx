@@ -1,26 +1,24 @@
-import PropTypes from 'prop-types';
-import React from 'react';
+import React, { ReactNode } from 'react';
 import cx from 'clsx';
 
 const DEFAULT_CLASS = 'react-tabs__tab-panel';
-const defaultProps = {
+
+interface TabPanelProps {
+  children?: ReactNode;
+  className?: string | string[] | object;
+  forceRender?: boolean;
+  id?: string;
+  selected?: boolean;
+  selectedClassName?: string;
+}
+
+const defaultProps: Partial<TabPanelProps> = {
   className: DEFAULT_CLASS,
   forceRender: false,
   selectedClassName: `${DEFAULT_CLASS}--selected`,
 };
-const propTypes = {
-  children: PropTypes.node,
-  className: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.array,
-    PropTypes.object,
-  ]),
-  forceRender: PropTypes.bool,
-  id: PropTypes.string, // private
-  selected: PropTypes.bool, // private
-  selectedClassName: PropTypes.string,
-};
-const TabPanel = (props) => {
+
+const TabPanel: React.FC<TabPanelProps> = (props) => {
   const {
     children,
     className,
@@ -38,7 +36,7 @@ const TabPanel = (props) => {
     <div
       {...attributes}
       className={cx(className, {
-        [selectedClassName]: selected,
+        [selectedClassName!]: selected,
       })}
       role="tabpanel"
       id={`panel${id}`}
@@ -49,7 +47,7 @@ const TabPanel = (props) => {
   );
 };
 
+// @ts-expect-error This special property is used internally by react-tabs
 TabPanel.tabsRole = 'TabPanel';
-TabPanel.propTypes = propTypes;
 
 export default TabPanel;
